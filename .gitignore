@@ -1,0 +1,4 @@
+debug/
+Makefile
+*.Release
+*.Debug
