@@ -6,7 +6,7 @@
 
 #define SHAREMEM_NAME "c:shareMemory"
 #define BULID_MESSAGE "Today is"_DATE_" "_TIME_
-
+//http://pws.niu.edu.tw/~ttlee/os.101.1/night/sharedMemory/
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -65,7 +65,6 @@ void MainWindow::on_pushButton_clicked()
 
     //建立共用記憶體
     //宣告變數
-
     hFile = OpenFileMapping(
                 FILE_MAP_ALL_ACCESS,
                 FALSE,
@@ -73,7 +72,6 @@ void MainWindow::on_pushButton_clicked()
                 );
 
     //開啟分享記憶體
-
     pBuf=(LPCTSTR)MapViewOfFile(
                 hFile,
                 FILE_MAP_ALL_ACCESS,
@@ -83,7 +81,6 @@ void MainWindow::on_pushButton_clicked()
                 );
 
     //放入自己的位址空間
-
     while(1){
         printf("%s\n",pBuf);
         Sleep(1000);
