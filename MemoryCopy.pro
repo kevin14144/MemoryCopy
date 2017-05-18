@@ -13,8 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    sharememory.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    sharememory.h
 
 FORMS    += mainwindow.ui
