@@ -39,6 +39,7 @@ public:
     QPushButton *btnCreateMemory;
     QLabel *label;
     QLineEdit *lineEdit_2;
+    QLineEdit *lineEdit_3;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -91,6 +92,11 @@ public:
         lineEdit_2->setObjectName(QStringLiteral("lineEdit_2"));
 
         gridLayout->addWidget(lineEdit_2, 2, 1, 1, 1);
+
+        lineEdit_3 = new QLineEdit(centralWidget);
+        lineEdit_3->setObjectName(QStringLiteral("lineEdit_3"));
+
+        gridLayout->addWidget(lineEdit_3, 3, 1, 1, 1);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);

@@ -159,10 +159,10 @@ void MainWindow::on_pushButton_clicked()
 
     BYTE* pData = new BYTE;
 
-sharememory->ReadDataFromMemoryBlcok(pData);
+    sharememory->ReadDataFromMemoryBlcok(pData);
 
 
-     char* dataGets =  (char*)pData;
+    char* dataGets =  (char*)pData;
 
 
    // QString qstrings = (QString)dataGets;
