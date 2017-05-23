@@ -76,25 +76,7 @@ void MainWindow::on_btnCopyData_clicked()
     dataInfo.IDCollection[0] = 1;
     dataInfo.IDCollection[1] = 2;
 
-QBitmap bitmap();
-
-
-    QImage qimg = QImage(100,100,QImage::Format_ARGB32);//Format_ARGB32
-
-if(qimg.isGrayscale())
-{
-
-    QRgb s = qimg.pixel(1,1);
-
-    int level = qGray(s);
-qimg.setPixelColor(1,1,QColor(255,250,251,200));
- s = qimg.pixel(1,1);
-    int a =  qGray(s);
-    a=2;
-}
-
-    QPixelFormat s =qimg.pixelFormat();
-
+ 
     int imageSize =  qimg.byteCount();
     dataInfo.ImageSize = imageSize;
     int nStructSize = sizeof(Data_Info);

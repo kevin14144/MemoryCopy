@@ -9,18 +9,18 @@ enum  enumErrorStatus
     OpenMemoryBlockFail =-3,
     GetMappingDataMemoryFail = -4,
     EmtpyDataPointer =-5,
-    DataBufferNotMatch = -6
+    DataBufferNotMatch = -6,
+    UnmapViewOfFileFail =-7
 };
 
 ShareMemory::ShareMemory()
 {
-  this->m_pData=nullptr;
+
 }
 
-ShareMemory::ShareMemory(LPCWSTR memoryBlcokName, LPVOID data, int bufferSize)
+ShareMemory::ShareMemory(LPCWSTR memoryBlcokName, int bufferSize)
 {
     this->m_MemoryBlcokName = memoryBlcokName;
-    this->m_pData = data;
     this->m_iBufferSize = bufferSize;
 }
 
@@ -104,43 +104,17 @@ int ShareMemory::GetMappingDataMemory()
     }
 }
 
-int ShareMemory::ReadDataFromMemoryBlcok(BYTE* pData)
-{
-    if(m_pBuf == nullptr)
-    {
-        return EmtpyDataPointer;
-    }
-
-//    if(sizeof(m_pBuf) != m_iBufferSize)
-//    {
-//        return DataBufferNotMatch;
-//    }
-    //output,input
-    memcpy(pData, m_pBuf, m_iBufferSize);
-
-    return NoErrorOccur;
-}
-
-int ShareMemory::WriteDataIntoMemoryBlcok()
-{
-    if(m_pData == nullptr)
-    {
-        return EmtpyDataPointer;
-    }
-    if(sizeof(m_pData) != m_iBufferSize)
-    {
-        return DataBufferNotMatch;
-    }
-
-    memcpy(m_pBuf, (BYTE*)m_pData, m_iBufferSize);
-
-    return NoErrorOccur;
-}
-
 int ShareMemory::ReleaseMemoryBlock()
 {
     if(m_hFile != nullptr)
     {
+        if(m_pBuf !=nullptr)
+        {
+            if (!UnmapViewOfFile(m_pBuf))
+            {
+                m_pBuf = nullptr;
+            }
+        }
         if(CloseHandle(m_hFile))
         {
             m_hFile = nullptr;
@@ -154,7 +128,6 @@ DWORD ShareMemory::GetErrorMessage()
     return GetLastError();
 }
 
-
 void ShareMemory::SetMemoryBlockName(LPCWSTR memoryBlcokName)
 {
     this->m_MemoryBlcokName = memoryBlcokName;
@@ -165,14 +138,47 @@ LPCWSTR ShareMemory::GetMemoryBlockName()
     return this->m_MemoryBlcokName;
 }
 
-void ShareMemory::SetData(LPVOID Data)
+int ShareMemory::WriteData(LPVOID Data)
 {
-    this->m_pData = Data;
+    if(Data == nullptr)
+    {
+        return EmtpyDataPointer;
+    }
+
+    memcpy(m_pBuf, (BYTE*)Data, m_iBufferSize);
+
+    if (!UnmapViewOfFile(m_pBuf))
+    {
+        return UnmapViewOfFileFail;
+    }
+
+    m_pBuf = nullptr;
+
+    return NoErrorOccur;
+
 }
 
-LPVOID ShareMemory::GetData()
+int ShareMemory::ReadData(LPVOID Data)
 {
-    return this->m_pBuf;
+    if(m_pBuf == nullptr)
+    {
+        return EmtpyDataPointer;
+    }
+
+    //記憶體區域複製
+    memcpy((BYTE*)Data, m_pBuf, m_iBufferSize);
+
+    //字元複製
+    //strcpy(Data,m_pBuf);
+
+    if (!UnmapViewOfFile(m_pBuf))
+    {
+        return UnmapViewOfFileFail;
+    }
+
+    m_pBuf = nullptr;
+
+    return NoErrorOccur;
 }
 
 void ShareMemory::SetDataBufferSize(int BufferSize)
